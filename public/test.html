@@ -1,0 +1,32 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+
+<script>
+
+	$(window).load(function() {
+
+		var User = Backbone.Model.extend({
+			urlRoot: '/users.json',
+			defaults: {
+				name: 'None',
+			    email: 'not-given'
+			}
+		});
+
+		var user = new User({id: 1});
+		user.fetch({
+			success: function(user) {
+				$("#test").html(user.get("name") + " : " + user.get("email"));
+			}
+		})
+
+
+	})
+	
+
+</script>
+
+<h1 id='test'>Replace Me!</h1>
+
+
