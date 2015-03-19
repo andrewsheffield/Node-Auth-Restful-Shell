@@ -43,10 +43,10 @@ app.post('/auth/', function(req, res) {
 
 app.get('/dashboard/', function(req, res) {
 
-    if (req.session.email == "sheff" && req.session.email == "1234") {
-    	response.sendFile(__dirname + '/public/dashboard.html');
+    if (req.session.email) {
+    	res.sendFile(__dirname + '/public/dashboard.html');
     } else {
-    	response.status(403).send("You're not authorized here");
+    	res.status(403).send("You're not authorized here");
     }
 });
 
