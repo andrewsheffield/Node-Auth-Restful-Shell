@@ -12,7 +12,8 @@
     "backbone": "~1.1.x",
     "mongoose": "~3.8.x",
     "jquery": "~2.1.x",
-    "body-parser": "~1.12.x"
+    "body-parser": "~1.12.x",
+    "express-session": "~1.10.x"
   },
   "engines": {
     "node": "0.10.x"
