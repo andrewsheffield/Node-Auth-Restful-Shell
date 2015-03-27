@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>Ink-Slinger - Dashboard</title>
+
+  <meta name="robots" content="noindex">
+
+  <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+
+    <link rel="stylesheet" href="stylesheets/dashboard.css">
+
+</head>
+
+<body>
+
+  <div class="container">
+  <div class="navbar navbar-default" role="navigation">
+    <div class="container">
+      <ol class="breadcrumb navbar-brand navbar-title">
+        <li>
+          <a href="#"><span class="glyphicon glyphicon-home"></span> Brand</a>
+        </li>
+        <li class="active">Dashboard</li>
+      </ol>
+      <ul class="nav navbar-nav">
+        <li><a href="#">Create New <span class="glyphicon glyphicon-plus"></span></a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="#">
+            <span class="glyphicon glyphicon-envelope"></span>
+            Messages 
+            <span class="badge">19</span>
+          </a>
+        </li>
+        <li class="dropdown user-dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ name.first }} {{ name.last }}<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Feedback</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!--Search form-->
+  <form role="form">
+    <div class="search-form input-group col-lg-4 col-lg-offset-4 col-md-4 col-md-offset-4">
+      <span class="input-group-addon">
+        <span class="glyphicon glyphicon-search"></span>
+      </span>
+      <input type="text" class="form-control" placeholder="Search" />
+    </div>
+  </form><!--End of Search field-->
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+
+      <div class="panel col-lg-3">
+        <div class="panel-doc panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Document</h3>
+          </div>
+          <div class="panel-body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce laoreet tincidunt odio at rhoncus. Morbi placerat velit eu risus vestibulum efficitur. Suspendisse suscipit justo est, et laoreet quam placerat eget. Morbi quis dui sagittis, rhoncus mauris a, vulputate massa.
+          </div>
+        </div>
+      </div>
+
+      <div class="panel col-lg-3">
+        <div class="panel-doc panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title">Selected</h3>
+            <span class="delete-doc glyphicon glyphicon-remove-circle"></span>
+          </div>
+          <div class="panel-body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce laoreet tincidunt odio at rhoncus. Morbi placerat velit eu risus vestibulum efficitur. Suspendisse suscipit justo est, et laoreet quam placerat eget. Morbi quis dui sagittis, rhoncus mauris a, vulputate massa.
+          </div>
+        </div>
+      </div>
+
+      <div class="panel col-lg-3">
+        <div class="panel-doc panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Document</h3>
+          </div>
+          <div class="panel-body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce laoreet tincidunt odio at rhoncus. Morbi placerat velit eu risus vestibulum efficitur. Suspendisse suscipit justo est, et laoreet quam placerat eget. Morbi quis dui sagittis, rhoncus mauris a, vulputate massa.
+          </div>
+        </div>
+      </div>
+
+      <div class="panel col-lg-3">
+        <div class="panel-doc panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Document</h3>
+          </div>
+          <div class="panel-body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce laoreet tincidunt odio at rhoncus. Morbi placerat velit eu risus vestibulum efficitur. Suspendisse suscipit justo est, et laoreet quam placerat eget. Morbi quis dui sagittis, rhoncus mauris a, vulputate massa.
+          </div>
+        </div>
+      </div>
+
+      <div class="panel col-lg-3">
+        <div class="panel-doc panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Document</h3>
+          </div>
+          <div class="panel-body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce laoreet tincidunt odio at rhoncus. Morbi placerat velit eu risus vestibulum efficitur. Suspendisse suscipit justo est, et laoreet quam placerat eget. Morbi quis dui sagittis, rhoncus mauris a, vulputate massa.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+  <script src='http://codepen.io/assets/libs/fullpage/jquery.js'></script>
+  <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script>
+
+</body>
+
+</html>

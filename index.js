@@ -1,7 +1,13 @@
 var express = require('express');
-var bodyParser = require('body-parser');
 var app = express();
+
+var bodyParser = require('body-parser');
 var session = require('express-session');
+var passport = require('passport');
+
+var DAL = require('./dal.js');
+
+var dal = new DAL();
 
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -39,6 +45,12 @@ app.post('/auth/', function(req, res) {
 			res.status(403).send("Not Authorized");
 		}
 	}
+});
+
+app.post('/signup/', function(req, res) {
+	dal.addNewUser(req.body.email, req.body.password, function () {
+		res.send('User successfully Added');
+	});
 });
 
 app.get('/dashboard/', function(req, res) {
