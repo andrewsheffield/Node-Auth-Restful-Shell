@@ -7,7 +7,8 @@ var usersSchema = new Schema({
 		last: String
 	},
 	username: String,
-	password: String
+	password: String,
+	verified: { type: Boolean, default: false }
 });
 
 mongoose.model('users', usersSchema);

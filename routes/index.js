@@ -5,8 +5,6 @@ var passport = require('passport');
 
 var signupRouter = require('./signup');
 
-router.use(signupRouter);
-
 //Can be called as middleware to protect certain routes
 function ensureAuth(req, res, next) {
 	if (req.isAuthenticated()) {
@@ -20,7 +18,11 @@ function ensureAuth(req, res, next) {
 router.get('/', function(req, res, next) {
 
 	if (req.isAuthenticated()) {
-		res.render('dashboard', req.user);
+		if (req.user.verified) {
+			res.render('dashboard', req.user);
+		} else {
+			res.render('index', { message: 'You have not yet verified your email.' });
+		}
 	} else {
 		res.render('index', { message: req.flash('error') });
 	}
@@ -36,10 +38,16 @@ router.post('/', passport.authenticate('local',
 
 router.get('/logout', function(req, res, next) {
 	req.logout();
-	res.redirect('/');
+	res.render('infosplash', {
+		title: 'Ink-Slinger - Logout',
+		header: 'You have successfully logged out.',
+		body: 'We hope to see you again soon!'
+	});
 });
 
 //Example of HTTP login use for secure directories
 router.use('/api', passport.authenticate('basic', { session: false }));
+
+router.use(signupRouter);
 
 module.exports = router;

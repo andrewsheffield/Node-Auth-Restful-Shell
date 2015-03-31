@@ -49,9 +49,11 @@ app.use(passport.session());
 
 //Start MongoDB Connection
 mongoose.connect('mongodb://ajsheffield:Midgees1@ds053438.mongolab.com:53438/heroku_app34579795');
-console.log("Connection to MongoDB Started");
+console.log("DB connection to Mongo started");
 
 function verifyCred(username, password, done) {
+
+  username = username.toLowerCase();
 
   mongoose.model('users').findOne({ 'username': username }, function(err, user) {
 
