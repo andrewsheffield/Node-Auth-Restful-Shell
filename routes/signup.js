@@ -20,11 +20,13 @@ var nodemailer = require("nodemailer");
 
 router.post('/signup', function(req, res) {
 
+	String.prototype.capitalize = function() {
+    	return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+	}
 
 
-
-	var firstname = req.body.firstname;
-	var lastname = req.body.lastname;
+	var firstname = req.body.firstname.capitalize();
+	var lastname = req.body.lastname.capitalize();
 	var username = req.body.username.toLowerCase();
 	var password = req.body.password;
 

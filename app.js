@@ -10,10 +10,23 @@ var passport = require('passport');
 var passportLocal = require('passport-local');
 var expressSession = require('express-session');
 var passportHttp = require('passport-http');
+var passportRM = require('passport-remember-me');
 var bcrypt = require('bcrypt');
 var flash = require('connect-flash');
+var crypto = require('crypto');
 
 var routes = require('./routes/index');
+
+String.prototype.hashCode = function() {
+  var hash = 0, i, chr, len;
+  if (this.length == 0) return hash;
+  for (i = 0, len = this.length; i < len; i++) {
+    chr   = this.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
 
 //require MongoDB with Mongoose
 var mongoose = require('mongoose');
@@ -46,6 +59,8 @@ app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(passport.authenticate('remember-me'));
+
 
 //Start MongoDB Connection
 mongoose.connect('mongodb://ajsheffield:Midgees1@ds053438.mongolab.com:53438/heroku_app34579795');
@@ -57,8 +72,6 @@ function verifyCred(username, password, done) {
 
   mongoose.model('users').findOne({ 'username': username }, function(err, user) {
 
-
-
     if (user) {
       if (bcrypt.compareSync(password, user.password)) {
         return done(null, user);
@@ -66,8 +79,8 @@ function verifyCred(username, password, done) {
     } else {
       return done(null, false, { message: 'Incorrect username or password.' });
     }
-  });
 
+  });
   
 }
 
@@ -75,6 +88,43 @@ passport.use(new passportLocal.Strategy(verifyCred));
 
 passport.use(new passportHttp.BasicStrategy(verifyCred));
 
+passport.use(new passportRM.Strategy(
+  function(token, done) {
+    var tokenArr = token.split(" ");
+    var username = tokenArr[0];
+    var tokenHash = tokenArr[1];
+
+    mongoose.model('users').findOne({ 'username': username }, function (err, user) {
+      if (user) {
+        bcrypt.compare(user.rmToken, tokenHash, function(err, res) {
+            if (err) {
+              return done(err);
+            } else {
+              return done(null, user);
+            }
+          });
+      } else {
+        return done(null, false);
+      }
+    })
+
+  },
+  function(user, done) {
+    mongoose.model('users').findOne( { 'username': user.username }, function(err, user) {
+        user.rmToken = crypto.randomBytes(16).toString('hex');
+        bcrypt.hash(user.rmToken, 10, function(err, hash) {
+          user.save(function(err, user) {
+            if (err) {
+              return done(err);
+            } else {
+              return done(null, user.username + " " + hash);
+            }
+          });
+        });
+        
+    });
+  }
+));
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);

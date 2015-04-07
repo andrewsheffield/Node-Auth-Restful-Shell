@@ -8,7 +8,8 @@ var usersSchema = new Schema({
 	},
 	username: String,
 	password: String,
-	verified: { type: Boolean, default: false }
+	verified: { type: Boolean, default: false },
+	rmToken: { type: String, default: "" }
 });
 
 mongoose.model('users', usersSchema);

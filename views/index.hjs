@@ -54,7 +54,7 @@
           </div>
           <div class="checkbox">
             <label>
-              <input type="checkbox" value="remember-me" />
+              <input type="checkbox" value="true" name="rememberme" />
               Remember Me
             </label>
           </div>
@@ -98,11 +98,8 @@
             </div>
             <input class="form-control" placeholder="Verify Password" type="password" />
           </div>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" value="remember-me" />
-              Remember Me
-            </label>
+          <div class="input-group">
+            &nbsp;
           </div>
           <button class="btn btn-success btn-lg btn-block" type="submit">
             <span class="glyphicon glyphicon-pencil"></span>
