@@ -14,7 +14,7 @@ function ensureAuth(req, res, next) {
 	if (req.isAuthenticated()) {
 		next();
 	} else {
-		res.reroute('/');
+		res.redirect('/');
 	}
 }
 
@@ -40,12 +40,13 @@ router.post('/', passport.authenticate('local',
 	function (req, res, next) {
 		if (!req.body.rememberme) { return next(); }
 
-		req.user.rmToken = crypto.randomBytes(16).toString('hex');
-        bcrypt.hash(req.user.rmToken, 10, function(err, hash) {
-          res.cookie('remember_me', req.user.username + " " + hash, { maxAge: (30 * 24 * 60 * 60 * 1000), httpOnly: true });
-        });
+		
         req.user.save(function(err, user) {
-          res.redirect('/');
+        	user.rmToken = crypto.randomBytes(16).toString('hex');
+        	bcrypt.hash(user.rmToken, 10, function(err, hash) {
+          		res.cookie('remember_me', user.username + " " + hash, { maxAge: (30 * 24 * 60 * 60 * 1000), httpOnly: true });
+          		return next();
+        	});
 		});
 	},
 	function (req, res) {
