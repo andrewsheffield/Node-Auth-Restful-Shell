@@ -20,7 +20,7 @@ function ensureAuth(req, res, next) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-		if (req.user) {
+		if (req.isAuthenticated()) {
 			if (req.user.verified) {
 				res.render('dashboard', req.user );
 			} else {
@@ -45,7 +45,7 @@ router.post('/', passport.authenticate('local',
           res.cookie('remember_me', req.user.username + " " + hash, { maxAge: (30 * 24 * 60 * 60 * 1000), httpOnly: true });
         });
         req.user.save(function(err, user) {
-          return next();
+          res.redirect('/');
 		});
 	},
 	function (req, res) {
