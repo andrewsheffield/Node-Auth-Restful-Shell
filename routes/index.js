@@ -22,7 +22,7 @@ function ensureAuth(req, res, next) {
 router.get('/', function(req, res, next) {
 		if (req.isAuthenticated()) {
 			if (req.user.verified) {
-				res.render('dashboard', req.user );
+				res.render('dashboard', { user: req.user });
 			} else {
 				res.render('index', { message: 'You have not yet verified your email.' });
 			}
