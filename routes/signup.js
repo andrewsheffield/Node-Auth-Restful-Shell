@@ -52,39 +52,51 @@ router.post('/signup', function(req, res) {
 		user.name.first = firstname;
 		user.name.last = lastname;
 		user.username = username;
-		user.password = bcrypt.hashSync(password, salt);
+		user.creationDate = Date.now();
 
 
 		user.save(function(err, user) {
 			if (err) return console.error(err);
 			else { 
-				console.log('User ' + user._id + ' has just signed up.');
-				var url = req.protocol + '://' + req.get('host') + "/verify/" + user._id;
 
-				// setup e-mail data with unicode symbols
-				var mailOptions = {
-				    from: "Ink-Slinger <noreply@ink-slinger.com>", // sender address
-				    to: username, // list of receivers
-				    subject: "Confirm Email", // Subject line
-				    text: "Enable HTML emails", // plaintext body
-				    html: "<a href='" + url + "'>" + url + "</a>" // html body
-				}
+				var Auth = mongoose.model('auth');
+				var auth = new Auth;
 
-				// send mail with defined transport object
-				smtpTransport.sendMail(mailOptions, function(error, res){
-				    if(error){
-				        console.log(error);
-				    }else{
-				        console.log("EMAIL Confirmation message sent");
-				    }
+				auth.user = user.id;
+				auth.password = bcrypt.hashSync(password, salt);
 
+				auth.save(function(err, auth) {
+					if (err) return console.error(err);
+
+					console.log('User ' + user._id + ' has just signed up.');
+					var url = req.protocol + '://' + req.get('host') + "/verify/" + user._id;
+
+					// setup e-mail data with unicode symbols
+					var mailOptions = {
+					    from: "Ink-Slinger <noreply@ink-slinger.com>", // sender address
+					    to: username, // list of receivers
+					    subject: "Confirm Email", // Subject line
+					    text: "Enable HTML emails", // plaintext body
+					    html: "<a href='" + url + "'>" + url + "</a>" // html body
+					}
+
+					// send mail with defined transport object
+					smtpTransport.sendMail(mailOptions, function(error, res){
+					    if(error){
+					        console.log(error);
+					    }else{
+					        console.log("EMAIL Confirmation message sent");
+					    }
+
+					});
+
+					res.render('infosplash', {
+						title: 'Ink-Slinger - Check your email',
+						header: 'Thank you for signing up!',
+						body: "Please check your email for your confirmation link to finish the signup process. If you haven't received an email within a few minutes, check your spam box."
+					});
 				});
 
-				res.render('infosplash', {
-					title: 'Ink-Slinger - Check your email',
-					header: 'Thank you for signing up!',
-					body: "Please check your email for your confirmation link to finish the signup process. If you haven't received an email within a few minutes, check your spam box."
-				});
 			};
 		});
 

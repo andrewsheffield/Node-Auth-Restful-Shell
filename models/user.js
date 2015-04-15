@@ -7,9 +7,9 @@ var usersSchema = new Schema({
 		last: String
 	},
 	username: String,
-	password: String,
 	verified: { type: Boolean, default: false },
-	rmToken: { type: String, default: "" }
+	creationDate: Date,
+	loginDates: [Date]
 });
 
 mongoose.model('users', usersSchema);

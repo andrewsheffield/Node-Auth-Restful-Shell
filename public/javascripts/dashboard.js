@@ -2,39 +2,44 @@ var app = angular.module('myApp', []).config(function($interpolateProvider){
     $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 });
 
-app.factory('myFactory', function() {
+app.factory('myFactory', function($http) {
   var d = new Date(Date.now());
-  var documents = [
-    { 
-      id: 0,
-      created: d,
-      modified: d,
-      title: 'Place Holder 1', 
-      details: 'This document is here to show how this would work.  You can add more documents above or edit the details of this one!  You can also delete it.  There current is no persistance so refreshing the page would bring me back.',
-      owner: 'UserID'
-    },
-    { 
-      id: 1,
-      created: d,
-      modified: d,
-      title: 'Place Holder 2', 
-      details: 'This document is here to show how this would work.  You can add more documents above or edit the details of this one!  You can also delete it.  There current is no persistance so refreshing the page would bring me back.',
-      owner: 'UserID'
-    }
-  ];
+  var documents = [];
   
   var factory = {};
   factory.getDocuments = function () {
+    var url = '/documents';
+    $http.get(url).success(function (res) {
+      res.forEach(function(obj, i) {
+        documents.push(obj);
+      });
+    });
     return documents;
   }
   factory.pushDocument = function(document) {
-    documents.push(document);
+    var url = '/newDocument';
+    $http.post(url, document).success(function (res) {
+      documents.push(res);
+    });
+  }
+  factory.updateDocument = function(document) {
+    var url = 'updateDocument';
+    $http.post(url, document).success(function (res) {
+      documents.forEach(function(obj, i) {
+        if (obj._id == res._id) {
+          obj.title = res.title;
+          obj.details = res.details;
+        }
+      });
+    });
   }
   factory.deleteDocument= function(document) {
-    var indexOfDoc;
-    for (var i in documents) {
-      if (documents[i] == document) documents.splice(i, 1);
-    }
+    var url = '/deleteDocument';
+    $http.post(url, document).success(function (res) {
+      for (var i in documents) {
+        if (documents[i]._id == document._id) documents.splice(i, 1);
+      }
+    });
   }
   factory.sendFeedback = function(feedback) {
     alert('Your feedback, ' + feedback.subject + ', has been sent.');
@@ -44,6 +49,8 @@ app.factory('myFactory', function() {
 });
 
 app.controller('myCtrl', function($scope, myFactory) {
+
+  
   
   $scope.documents = [];
   $scope.selected = {};
@@ -59,12 +66,8 @@ app.controller('myCtrl', function($scope, myFactory) {
     var d = new Date(Date.now());
     var document =
       { 
-        id: Math.floor((Math.random() * 10000) + 1),
-        created: d,
-        modified: d,
         title: $scope.newDoc.title, 
-        details: $scope.newDoc.details,
-        owner: 'UserID'
+        details: $scope.newDoc.details
     	};
     myFactory.pushDocument(document);
   }
@@ -76,7 +79,7 @@ app.controller('myCtrl', function($scope, myFactory) {
   }
   
   $scope.openDoc = function (document) {
-    alert("Opened document: " + document.id);
+    alert("Opened document: " + document._id);
   }
   
   $scope.sendFeedback = function () {
@@ -97,8 +100,7 @@ app.controller('myCtrl', function($scope, myFactory) {
   }
   
   $scope.saveDocChanges = function () {
-    $scope.selected.title = $scope.docChanges.title;
-    $scope.selected.details = $scope.docChanges.details;
+    myFactory.updateDocument($scope.docChanges);
   }
   
   $('.modal').on('shown.bs.modal', function() {

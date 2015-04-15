@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var crypto = require('crypto');
 var bcrypt = require('bcrypt');
 
+var settersRouter = require('./setters');
+var gettersRouter = require('./getters');
 var signupRouter = require('./signup');
 
 //Can be called as middleware to protect certain routes
@@ -40,14 +42,14 @@ router.post('/', passport.authenticate('local',
 	function (req, res, next) {
 		if (!req.body.rememberme) { return next(); }
 
-		
-        req.user.save(function(err, user) {
-        	user.rmToken = crypto.randomBytes(16).toString('hex');
-        	bcrypt.hash(user.rmToken, 10, function(err, hash) {
-          		res.cookie('remember_me', user.username + " " + hash, { maxAge: (30 * 24 * 60 * 60 * 1000), httpOnly: true });
+    	mongoose.model('auth').findOne( { 'user' : req.user._id }, function (err, auth) {
+    		auth.rmToken = crypto.randomBytes(16).toString('hex');
+        	bcrypt.hash(auth.rmToken, 10, function(err, hash) {
+          		res.cookie('remember_me', req.user.username + " " + hash, { maxAge: (30 * 24 * 60 * 60 * 1000), httpOnly: true });
+          		auth.save();
           		return next();
         	});
-		});
+    	});
 	},
 	function (req, res) {
 		res.redirect('/');
@@ -67,6 +69,9 @@ router.get('/logout', function(req, res, next) {
 //Example of HTTP login use for secure directories
 router.use('/api', passport.authenticate('basic', { session: false }));
 
+router.use(settersRouter);
+router.use(gettersRouter);
 router.use(signupRouter);
+
 
 module.exports = router;

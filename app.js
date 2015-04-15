@@ -14,7 +14,6 @@ var passportRM = require('passport-remember-me');
 var bcrypt = require('bcrypt');
 var flash = require('connect-flash');
 var crypto = require('crypto');
-
 var routes = require('./routes/index');
 
 String.prototype.hashCode = function() {
@@ -73,9 +72,13 @@ function verifyCred(username, password, done) {
   mongoose.model('users').findOne({ 'username': username }, function(err, user) {
 
     if (user) {
-      if (bcrypt.compareSync(password, user.password)) {
-        return done(null, user);
-      }
+      mongoose.model('auth').findOne({ user: user.id }, function(err, auth) {
+        if (bcrypt.compareSync(password, auth.password)) {
+          user.loginDates.push(Date.now());
+          user.save();
+          return done(null, user);
+        }
+      });
     } else {
       return done(null, false, { message: 'Incorrect username or password.' });
     }
@@ -96,22 +99,29 @@ passport.use(new passportRM.Strategy(
 
     mongoose.model('users').findOne({ 'username': username }, function (err, user) {
       if (user) {
-        bcrypt.compare(user.rmToken, tokenHash, function(err, res) {
-            if (err) {
-              return done(err);
-            } else {
-              return done(null, user);
-            }
-          });
+        mongoose.model('auth').findOne({ 'user': user._id } , function (err, auth) {
+          if (auth) {
+            bcrypt.compare(auth.rmToken, tokenHash, function(err, res) {
+              if (err) {
+                return done(err);
+              } else {
+                return done(null, user);
+              }
+            });
+          } else {
+            return done(null, false);
+          }
+        });
       } else {
         return done(null, false);
       }
-    })
+    });
 
   },
   function(user, done) {
     mongoose.model('users').findOne( { 'username': user.username }, function(err, user) {
-        user.rmToken = crypto.randomBytes(16).toString('hex');
+      mongoose.model('auth').findOne( { 'user': user._id }, function (err, auth) {
+        auth.rmToken = crypto.randomBytes(16).toString('hex');
         bcrypt.hash(user.rmToken, 10, function(err, hash) {
           user.save(function(err, user) {
             if (err) {
@@ -121,7 +131,7 @@ passport.use(new passportRM.Strategy(
             }
           });
         });
-        
+      });
     });
   }
 ));
