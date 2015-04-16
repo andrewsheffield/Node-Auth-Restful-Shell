@@ -36,6 +36,22 @@ router.post('/updateDocument', function(req, res) {
 		document.save();
 		res.send(document);
 	});
+});
+
+router.post('/addFeedback', function(req, res) {
+
+	var Feedback = mongoose.model('feedback');
+	var feedback = new Feedback;
+
+	feedback.subject = req.body.subject;
+	feedback.body = req.body.subject;
+
+	feedback.save(function (err, feedback) {
+		if (err) return console.error(err);
+		res.send(feedback);
+	});
+
+
 })
 
 module.exports = router;

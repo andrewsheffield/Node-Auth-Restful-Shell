@@ -42,7 +42,10 @@ app.factory('myFactory', function($http) {
     });
   }
   factory.sendFeedback = function(feedback) {
-    alert('Your feedback, ' + feedback.subject + ', has been sent.');
+    var url = '/addFeedback';
+    $http.post(url, feedback).success(function (res) {
+      console.log(res);
+    });
   }
   
   return factory;
@@ -85,11 +88,8 @@ app.controller('myCtrl', function($scope, myFactory) {
   $scope.sendFeedback = function () {
     var d = new Date(Date.now());
     var feedback = {
-      id: 0,
-      created: d,
       subject: $scope.feedback.subject,
-      body: $scope.feedback.body,
-      owner: 'UserID'
+      body: $scope.feedback.body
     }
     myFactory.sendFeedback(feedback);
   }

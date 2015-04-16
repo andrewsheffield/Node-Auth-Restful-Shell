@@ -2,10 +2,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var feedbackSchema = new Schema({
-	user: String,
-	topic: String,
-	creationTimeDate: String,
-	content: String
+	user: {
+		type: Schema.ObjectId,
+		ref: 'users'
+	},
+	subject: String,
+	creationTimeDate: { type: Date, default: Date.now()},
+	body: String
 });
 
 mongoose.model('feedback', feedbackSchema);
