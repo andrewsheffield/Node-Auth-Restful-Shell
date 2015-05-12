@@ -7,7 +7,7 @@ var feedbackSchema = new Schema({
 		ref: 'users'
 	},
 	subject: String,
-	creationTimeDate: { type: Date, default: Date.now()},
+	creationDate: { type: Date, default: Date.now()},
 	body: String
 });
 

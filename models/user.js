@@ -8,7 +8,7 @@ var usersSchema = new Schema({
 	},
 	username: String,
 	verified: { type: Boolean, default: false },
-	creationDate: Date,
+	creationDate: { type: Date, default: Date.now() },
 	loginDates: [Date]
 });
 

@@ -33,7 +33,7 @@ router.get('/', function(req, res, next) {
 		}
 });
 
-router.post('/', passport.authenticate('local', 
+router.post('/authenticate', passport.authenticate('local', 
 	{
 		//successRedirect: '/',
 		failureRedirect: '/',
