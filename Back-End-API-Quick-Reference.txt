@@ -1,0 +1,39 @@
+Authenticate A User
+
+	/authenticate
+
+Logout of User
+
+	/authenticate/logout
+
+Signup/Create a user
+
+	/signup
+
+Verify an account
+	
+	/signup/verify/:id //where id is the users ID
+
+Get all Documents for User (excludes actual document data)
+
+	/documents
+
+get document by ID
+
+	/documents/:id //where id is the doc id
+
+set new document
+
+	/documents/newDocument
+
+	returns new document data
+
+update document
+	
+	/documents/updateDocument
+
+	updates document data, requires document with updates sent back via JSON
+
+Create new feedback
+
+	/feedback/addFeedback

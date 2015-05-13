@@ -4,6 +4,36 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var bodyParser = require('body-parser');
 
+//#####GETTERS#####
+//Root is the name of the document '/documents'
+
+router.get('/', function(req, res) {
+
+	if (req.user) {
+		mongoose.model('documents').find({ user: req.user }, 'title details', function(err, documents) {
+			res.send(documents);
+		});
+	} else {
+		res.send(403);
+	}
+
+});
+
+router.get('/:id', function(req, res) {
+
+	if (req.user) {
+		mongoose.model('documents').findOne({ user: req.user, _id: req.params.id }, function(err, documents) {
+			if (documents) res.send(documents);
+			else res.status(403).send('That object does not exist or you do not have permission to access it.');
+		});
+	} else {
+		res.send(403);
+	}
+
+});
+
+//#####SETTERS#####
+
 router.post('/newDocument', function(req, res) {
 
 	var Document = mongoose.model('documents');
@@ -12,7 +42,6 @@ router.post('/newDocument', function(req, res) {
 	document.user = req.user;
 	document.title = req.body.title;
 	document.details = req.body.details;
-	document.creationDate = Date.now();
 	document.modifiedDate.push(Date.now());
 
 	document.save(function (err, document) {
@@ -37,21 +66,5 @@ router.post('/updateDocument', function(req, res) {
 		res.send(document);
 	});
 });
-
-router.post('/addFeedback', function(req, res) {
-
-	var Feedback = mongoose.model('feedback');
-	var feedback = new Feedback;
-
-	feedback.subject = req.body.subject;
-	feedback.body = req.body.subject;
-
-	feedback.save(function (err, feedback) {
-		if (err) return console.error(err);
-		res.send(feedback);
-	});
-
-
-})
 
 module.exports = router;

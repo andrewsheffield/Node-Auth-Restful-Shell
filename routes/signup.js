@@ -8,18 +8,17 @@ var bcrypt = require('bcrypt');
 var nodemailer = require("nodemailer");
 
 // create reusable transport method (opens pool of SMTP connections)
-	var smtpTransport = nodemailer.createTransport({
-	    service: "Gmail",
-	    auth: {
-	        user: "sheffieldusmc@gmail.com",
-	        pass: "dqbtbcrzzkmbarys"
-	    }
-	});
+var smtpTransport = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: "sheffieldusmc@gmail.com",
+        pass: "dqbtbcrzzkmbarys"
+    }
+});
 
-	
+router.post('/', function(req, res) {
 
-router.post('/signup', function(req, res) {
-
+	//Function to be used on Strings to set proper capitalization
 	String.prototype.capitalize = function() {
     	return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
 	}

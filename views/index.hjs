@@ -39,7 +39,7 @@
 
       <!--Login Tab-->
       <div class="tab-pane fade in active" id="login">
-        <form class="form-login" role="form" action="" method="post">
+        <form class="form-login" role="form" action="/authenticate" method="post">
           <div class="input-group">
             <div class="input-group-addon">
               <span class="glyphicon glyphicon-envelope"></span>

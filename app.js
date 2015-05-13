@@ -14,6 +14,8 @@ var passportRM = require('passport-remember-me');
 var bcrypt = require('bcrypt');
 var flash = require('connect-flash');
 var crypto = require('crypto');
+
+
 var routes = require('./routes/index');
 
 String.prototype.hashCode = function() {
@@ -67,6 +69,7 @@ console.log("DB connection to Mongo started");
 
 function verifyCred(username, password, done) {
 
+  //lower case the username on entry...makes it none case sensitive.
   username = username.toLowerCase();
 
   mongoose.model('users').findOne({ 'username': username }, function(err, user) {
@@ -148,7 +151,14 @@ passport.deserializeUser(function(id, done) {
   
 })
 
-
+//Get all routers in routes folder
+fs.readdirSync(__dirname + '/routes').forEach(function(filename) {
+  if (~filename.indexOf('.js')) {
+    var aRoute = require(__dirname + '/routes/' + filename);
+    var filenameFront = filename.split('.')[0];
+    app.use('/' + filenameFront, aRoute);
+  }
+});
 
 app.use('/', routes);
 
