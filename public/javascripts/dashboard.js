@@ -17,14 +17,14 @@ app.factory('myFactory', function($http) {
     return documents;
   }
   factory.pushDocument = function(document) {
-    var url = '/newDocument';
+    var url = '/documents';
     $http.post(url, document).success(function (res) {
       documents.push(res);
     });
   }
   factory.updateDocument = function(document) {
-    var url = 'updateDocument';
-    $http.post(url, document).success(function (res) {
+    var url = '/documents/' + document._id;
+    $http.put(url, document).success(function (res) {
       documents.forEach(function(obj, i) {
         if (obj._id == res._id) {
           obj.title = res.title;
@@ -34,12 +34,12 @@ app.factory('myFactory', function($http) {
     });
   }
   factory.deleteDocument= function(document) {
-    var url = '/deleteDocument';
-    $http.post(url, document).success(function (res) {
-      for (var i in documents) {
-        if (documents[i]._id == document._id) documents.splice(i, 1);
-      }
-    });
+    for (var i in documents) {
+      if (documents[i]._id == document._id) documents.splice(i, 1);
+    }
+
+    var url = '/documents/' + document._id;
+    $http.delete(url);
   }
   factory.sendFeedback = function(feedback) {
     var url = '/addFeedback';

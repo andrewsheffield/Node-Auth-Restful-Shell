@@ -12,7 +12,7 @@ function ensureAuth(req, res, next) {
 	if (req.isAuthenticated()) {
 		next();
 	} else {
-		res.redirect('/');
+		res.status(403).send('Error 403: You do not have the correct credentials to access this page.');
 	}
 }
 

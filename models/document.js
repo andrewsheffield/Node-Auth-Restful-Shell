@@ -8,7 +8,7 @@ var documentsSchema = new Schema({
 	},
 	title: String,
 	details: String,
-	creationDate: Date,
+	creationDate: { type: Date, default: Date.now() },
 	modifiedDate: [Date]
 });
 
