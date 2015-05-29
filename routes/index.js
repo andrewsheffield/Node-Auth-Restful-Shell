@@ -29,6 +29,10 @@ router.get('/', function(req, res, next) {
 		}
 });
 
+router.get('/tester', function(req, res) {
+	res.render('test');
+});
+
 /*
 router.post('/', passport.authenticate('local', 
 	{

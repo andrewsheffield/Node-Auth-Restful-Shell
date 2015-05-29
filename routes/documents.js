@@ -19,9 +19,14 @@ function ensureAuth(req, res, next) {
 
 router.get('/', ensureAuth, function(req, res) {
 
-	mongoose.model('documents').find({ user: req.user }, 'title details', function(err, documents) {
+	mongoose.model('documents').find({ user: req.user }, function(err, documents) {
 		if (err) res.status(500).send(err);
-		else res.send(documents);
+		else {
+			mongoose.model('documents').populate(documents, {path: 'points'}, function (err, documents) {
+				if (err) res.status(500).send(err);
+				else res.send(documents);
+			});
+		}
 	});
 
 });
@@ -36,7 +41,8 @@ router.post('/', ensureAuth, function(req, res) {
 	document.user = req.user;
 	document.title = req.body.title;
 	document.details = req.body.details;
-	document.modifiedDate.push(Date.now());
+	document.modifiedDates.push(Date.now());
+
 
 	document.save(function (err, document) {
 		if (err) res.send(500).send(err);
@@ -55,8 +61,9 @@ router.get('/:id', ensureAuth, function(req, res) {
 
 });
 
+////#####Update a Document#####
 router.put('/:id', ensureAuth, function(req, res) {
-	mongoose.model('documents').findOne({ _id: req.params.id }, function(err, document) {
+	mongoose.model('documents').findOne({ user: req.user, _id: req.params.id }, function(err, document) {
 		if (err) res.status(500).send(err);
 		else {
 			if (req.body.title) {
@@ -66,19 +73,22 @@ router.put('/:id', ensureAuth, function(req, res) {
 				document.details = req.body.details;
 			}
 			document.modifiedDate.push(Date.now());
-			document.save();
-			res.send(document);
+			document.save(function(err, document) {
+				if (err) res.status(500).send(err);
+				else res.send(document);
+			});
 		}
 	});
 });
 
+////#####Delete a Document#####
 router.delete('/:id', ensureAuth, function(req, res) {
-
-	mongoose.model('documents').findOne({ _id: req.params.id }).remove(function(err) {
+	mongoose.model('documents').findOne({ user: req.user, _id: req.params.id }).remove(function(err) {
 		if (err) res.status(500).send(err);
 		else res.send(200);
 	});
 });
+
 
 
 

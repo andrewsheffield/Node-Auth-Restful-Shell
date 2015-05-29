@@ -1,21 +1,19 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var documentsSchema = new Schema({
+var sentencesSchema = new Schema({
 	user: {
 		type: Schema.ObjectId,
 		ref: 'users'
 	},
-	title: String,
-	details: String,
-	status: String,
+	orderNumber: Number,
+	body: String,
 	creationDate: { type: Date, default: Date.now() },
-	modifiedDates: [Date],
-	openedDates: [Date],
-	points: [{
+	sources: [{
 		type: Schema.ObjectId,
-		ref: 'points'
+		ref: 'sources'
 	}]
 });
 
-mongoose.model('documents', documentsSchema);
+
+mongoose.model('sentences', sentencesSchema);

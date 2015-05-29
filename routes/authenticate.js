@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var crypto = require('crypto');
 var bcrypt = require('bcrypt');
 
+//   '/authenticate/'
 router.post('/', passport.authenticate('local', 
 	{
 		//successRedirect: '/',
