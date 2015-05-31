@@ -1,28 +1,27 @@
-function makeNewPoint(id) {
+function makeNewPoints() {
 
-	$.ajax({
-		type: "POST",
-	 	url: "/documents/points/" + id,
-		data: { title: "add a point test", note: "This and that and the other"},
-		dataType: "json",
-		success: function(point) {
-			console.log(point);
-		}
+	for (i = 0; i < 10; i++) {
+		$.ajax({
+			type: "POST",
+		 	url: "/points",
+			data: { title: "Point: #" + i, note: "This and that and the other"},
+			dataType: "json",
+			success: function(point) {
+				console.log("point added");
+			}
+		});
 
-	});
-
+	}
 }
 
-function getDocuments() {
+function deleteAPoint(id) {
 
 	$.ajax({
-		method: 'GET',
-	 	url: "/documents",
-		dataType: "json",
-		success: function(data) {
-			console.log(data);
-		}
-
-	});
+			type: "DELETE",
+		 	url: "/points/" + id,
+			success: function(point) {
+				console.log("point deleted");
+			}
+		});
 
 }
