@@ -15,11 +15,27 @@ function ensureAuth(req, res, next) {
 	}
 }
 
-//######Get all points that belong to a user######
+////#####Create a new point####
+router.post('/', ensureAuth, function(req, res) {
 
+	var Point = mongoose.model('points');
+	var point = new Point(req.body);
+
+	point.user = req.user;
+	point.save(function(err, point) {
+		if (err) res.status(500).send(err);
+		else res.send(point);
+	});
+
+});
+
+//######Get all points that belong to a user######
 router.get('/', ensureAuth, function(req, res) {
 
-	mongoose.model('points').find( { user: req.user }, function(err, points) {
+	var model = mongoose.model('points');
+	var query = { user: req.user };
+
+	model.find(query, function(err, points) {
 		if (err) res.status(500).send(err);
 		else res.send(points);
 	});
@@ -27,27 +43,13 @@ router.get('/', ensureAuth, function(req, res) {
 });
 
 //#######Get a point by ID#########
-
 router.get('/:id', ensureAuth, function(req, res) {
 
-	mongoose.model('points').findOne( { user: req.user, _id: req.params.id }, function(err, point) {
-		if (err) res.status(500).send(err);
-		else res.send(point);
-	});
+	var model = mongoose.model('points');
+	var id = req.params.id;
+	var query = { user: req.user, _id: id };
 
-});
-
-////#####Create a new point####
-
-router.post('/', ensureAuth, function(req, res) {
-
-	var Point = mongoose.model('points');
-	var point = new Point;
-
-	point.user = req.user;
-	point.title = req.body.title;
-	point.note = req.body.note;
-	point.save(function(err, point) {
+	model.findOne(query, function(err, point) {
 		if (err) res.status(500).send(err);
 		else res.send(point);
 	});
@@ -57,22 +59,29 @@ router.post('/', ensureAuth, function(req, res) {
 //########Update a point by its ID######
 router.put('/:id', ensureAuth, function(req, res) {
 
-	mongoose.model('points').findOne({ user: req.user, _id: req.params.id}, function(err, point) {
+	var model = mongoose.model('points');
+	var id = req.params.id;
+	var query = { user: req.user, _id: id};
+	var update = req.body;
+
+	model.findOneAndUpdate(query, update, function(err, point) {
 		if (err) res.status(500).send(err);
-		else {
-			if (req.body.title) point.title = req.body.title;
-			if (req.body.note) point.note = req.body.note;
-		}
+		else res.send(point);
 	});
 
 });
 
 //#####Delete a point by ID##########
 router.delete('/:id', ensureAuth, function(req, res) {
-	mongoose.model('points').findOne({ user: req.user, _id: req.params.id }).remove(function(err) {
+
+	var model = mongoose.model('points');
+	var id = req.params.id;
+	var query = { user: req.user, _id: id };
+
+	model.findOneAndRemove(query, function(err) {
 		if (err) res.status(500).send(err);
-		else res.sendStatus(200);
-	})
+		else res.sendStatus(204);
+	});
 });
 
 module.exports = router;

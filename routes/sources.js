@@ -15,9 +15,27 @@ function ensureAuth(req, res, next) {
 	}
 }
 
+//###Create a new source###
+router.post('/', ensureAuth, function(req, res) {
+
+	var newObject = req.body;
+	var Source = mongoose.model('sources');
+	var source = new Source(newObject);
+
+	source.user = req.user;
+	source.save(function(err, source) {
+		if (err) res.status(500).send(err);
+		else res.send(source);
+	});
+});
+
 //###Get all sources belonging to the user#####
 router.get('/', ensureAuth, function(req, res) {
-	mongoose.model('sources').find( { user: req.user }, function(err, sources) {
+
+	var model = mongoose.model('sources');
+	var query = { user: req.user };
+
+	model.find(query , function(err, sources) {
 		if (err) res.status(500).send(err);
 		else res.send(sources);
 	});
@@ -25,30 +43,12 @@ router.get('/', ensureAuth, function(req, res) {
 
 //###Get a source by id###
 router.get('/:id', ensureAuth, function(req, res) {
-	mongoose.model('sources').findOne( { user: req.user, _id: req.params.id }, function (err, source) {
-		if (err) res.status(500).send(err);
-		else res.send(source);
-	});
-});
 
-//###Create a new source###
-router.post('/', ensureAuth, function(req, res) {
+	var model = mongoose.model('sources');
+	var id = req.params.id;
+	var query = { user: req.user, _id: id };
 
-	var Source = mongoose.model('sources');
-	var source = new Source;
-
-	source.user = req.user;
-	source.type = req.body.type;
-	source.articleTitle = req.body.articleTitle;
-	source.author = req.body.author;
-	source.websiteTitle = req.body.websiteTitle;
-	source.url = req.body.url;
-	source.publication = req.body.publication;
-	source.publishedDate = req.body.publishedDate;
-	source.accessedDate = req.body.accessedDate;
-	source.quotes.push(req.body.quotes);
-
-	source.save(function(err, source) {
+	model.findOne(query, function (err, source) {
 		if (err) res.status(500).send(err);
 		else res.send(source);
 	});
@@ -56,12 +56,26 @@ router.post('/', ensureAuth, function(req, res) {
 
 //###Update a source###
 router.put('/:id', ensureAuth, function(req, res) {
-	res.status(400).send("This function is not yet implemented.");
+
+	var model = mongoose.model('sources');
+	var id = req.params.id;
+	var query = { user: req.user, _id: id };
+	var update= req.body;
+
+	model.findOneAndUpdate(query, update, function(err, source) {
+		if (err) res.status(500).send(err);
+		else res.send(source);
+	});
 });
 
 //###Delete a source###
 router.delete('/:id', ensureAuth, function(req, res) {
-	mongoose.model('sources').find( { user: req.user, _id: req.params.id }).remove(function(err) {
+
+	var model = mongoose.model('sources');
+	var id = req.params.id;
+	var query = { user: req.user, _id: id };
+
+	model.findOneAndRemove(query, function(err) {
 		if (err) res.status(500).send(err);
 		else res.sendStatus(204);
 	});

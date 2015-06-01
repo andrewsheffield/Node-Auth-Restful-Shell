@@ -7,16 +7,12 @@ var bodyParser = require('body-parser');
 router.post('/', function(req, res) {
 
 	var Feedback = mongoose.model('feedback');
-	var feedback = new Feedback;
-
-	feedback.subject = req.body.subject;
-	feedback.body = req.body.subject;
+	var feedback = new Feedback(req.body);
 
 	feedback.save(function (err, feedback) {
 		if (err) res.status(500).send(err);
 		else res.send(200);
 	});
-
 
 });
 

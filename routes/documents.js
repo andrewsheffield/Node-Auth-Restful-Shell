@@ -84,7 +84,7 @@ router.delete('/:id', ensureAuth, function(req, res) {
 
 	model.findOneAndRemove(query, function(err) {
 		if (err) res.status(500).send(err);
-		else res.sendStatus(200);
+		else res.sendStatus(204);
 	});
 });
 

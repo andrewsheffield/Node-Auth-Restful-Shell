@@ -15,9 +15,27 @@ function ensureAuth(req, res, next) {
 	}
 }
 
+//######create a new sentence#######
+router.post('/', ensureAuth, function(req, res) {
+
+	var newObject = req.body;
+	var Sentence = mongoose.model('sentences');
+	var sentence = new Sentence(newObject);
+
+	sentence.user = req.user;
+	sentence.save(function(err, sentence) {
+		if (err) res.status(500).send(err);
+		else res.send(sentence);
+	});
+});
+
 //#######Get all sentences for user#########
 router.get('/', ensureAuth, function(req, res) {
-	mongoose.model('sentences').find( { user: req.user }, function(err, sentences) {
+
+	var model = mongoose.model('sentences');
+	var query = { user: req.user };
+
+	model.find(query, function(err, sentences) {
 		if (err) res.status(500).send(err);
 		else res.send(sentences);
 	});
@@ -25,21 +43,12 @@ router.get('/', ensureAuth, function(req, res) {
 
 //#######Get a sentence by id#########
 router.get('/:id', ensureAuth, function(req, res) {
-	mongoose.model('sentences').findOne( { user: req.user, _id: req.params.id }, function(err, sentence) {
-		if (err) res.status(500).send(err);
-		else res.send(sentence);
-	});
-});
 
-//######create a new sentence#######
-router.post('/', ensureAuth, function(req, res) {
+	var model = mongoose.model('sentences');
+	var id = req.params.id;
+	var query = { user: req.user, _id: id };
 
-	var Sentence = mongoose.model('sentences');
-	var sentence = new Sentence;
-
-	sentence.user = req.user;
-	sentence.body = req.body.body;
-	sentence.save(function(err, sentence) {
+	model.findOne(query , function(err, sentence) {
 		if (err) res.status(500).send(err);
 		else res.send(sentence);
 	});
@@ -47,23 +56,29 @@ router.post('/', ensureAuth, function(req, res) {
 
 //#######update a sentence by the id#####
 router.put('/:id', ensureAuth, function(req, res) {
-	mongoose.model('sentences').findOne( { user: req.user, _id: req.params.id }, function(err, sentence) {
+
+	var model = mongoose.model('sentences');
+	var id = req.params.id;
+	var query = { user: req.user, _id: id };
+	var update = req.body;
+
+	model.findOneAndUpdate(query, update, function(err, sentence) {
 		if (err) res.status(500).send(err);
-		else {
-			if (req.body.body) sentence.body = req.body.body;
-			sentence.save(function(err, sentence) {
-				if (err) res.status(500).send(err);
-				else res.send(sentence);
-			});
-		}
+		else res.send(sentence);
 	});
 });
 
+//###Delete a sentence by its ID###
 router.delete('/:id', ensureAuth, function(req, res) {
-	mongoose.model('sentences').findOne( { user: req.user, _id: req.params.id }).remove(function (err) {
+
+	var model = mongoose.model('sentences');
+	var id = req.params.id;
+	var query = { user: req.user, _id: id };
+
+	model.findOneAndRemove(query, function(err) {
 		if (err) res.status(500).send(err);
-		else res.sendStatus(200);
-	})
+		else res.sendStatus(204);
+	});
 });
 
 module.exports = router;
