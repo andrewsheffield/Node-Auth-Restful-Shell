@@ -15,14 +15,30 @@ function ensureAuth(req, res, next) {
 	}
 }
 
-//#####Gets All documents for user#####
+//#####Create a new Document#####
+router.post('/', ensureAuth, function(req, res) {
 
+	var Document = mongoose.model('documents');
+	var document = new Document(req.body);
+
+	document.user = req.user;
+	document.save(function (err, document) {
+		if (err) res.send(500).send(err);
+		else res.send(document);
+	});
+
+});
+
+//#####Gets All documents for user#####
 router.get('/', ensureAuth, function(req, res) {
 
-	mongoose.model('documents').find({ user: req.user }, function(err, documents) {
+	var model = mongoose.model('documents');
+	var query = { user: req.user };
+
+	model.find(query, function(err, documents) {
 		if (err) res.status(500).send(err);
 		else {
-			mongoose.model('documents').populate(documents, {path: 'points'}, function (err, documents) {
+			model.populate(documents, { path: 'points' }, function (err, documents) {
 				if (err) res.status(500).send(err);
 				else res.send(documents);
 			});
@@ -31,64 +47,46 @@ router.get('/', ensureAuth, function(req, res) {
 
 });
 
-//#####Create a new Document#####
-
-router.post('/', ensureAuth, function(req, res) {
-
-	var Document = mongoose.model('documents');
-	var document = new Document;
-
-	document.user = req.user;
-	document.title = req.body.title;
-	document.details = req.body.details;
-	document.modifiedDates.push(Date.now());
-
-
-	document.save(function (err, document) {
-		if (err) res.send(500).send(err);
-		else res.send(document);
-	});
-});
-
 ////#####Get a Document#####
-
 router.get('/:id', ensureAuth, function(req, res) {
 
-	mongoose.model('documents').findOne({ user: req.user, _id: req.params.id }, function(err, documents) {
-		if (documents) res.send(documents);
-		else res.status(403).send('That object does not exist or you do not have permission to access it.');
+	var model = mongoose.model('documents');
+	var id = req.params.id;
+	var query = { user: req.user, _id: id };
+
+	model.findOne(query, function(err, document) {
+		if (err) res.status(500).send(err);
+		else res.send(document);
 	});
 
 });
 
 ////#####Update a Document#####
 router.put('/:id', ensureAuth, function(req, res) {
-	mongoose.model('documents').findOne({ user: req.user, _id: req.params.id }, function(err, document) {
+
+	var model = mongoose.model('documents');
+	var id = req.params.id;
+	var query = { user: req.user, _id: id };
+	var update = req.body;
+	
+	model.findOneAndUpdate(query, update, function(err, document) {
 		if (err) res.status(500).send(err);
-		else {
-			if (req.body.title) {
-				document.title = req.body.title;
-			}
-			if (req.body.details) {
-				document.details = req.body.details;
-			}
-			document.modifiedDate.push(Date.now());
-			document.save(function(err, document) {
-				if (err) res.status(500).send(err);
-				else res.send(document);
-			});
-		}
+		else res.send(document);
 	});
 });
 
 ////#####Delete a Document#####
 router.delete('/:id', ensureAuth, function(req, res) {
-	mongoose.model('documents').findOne({ user: req.user, _id: req.params.id }).remove(function(err) {
+
+	var model = mongoose.model('documents');
+	var id = req.params.id;
+	var query = { user: req.user, _id: id };
+
+	model.findOneAndRemove(query, function(err) {
 		if (err) res.status(500).send(err);
-		else res.send(200);
+		else res.sendStatus(200);
 	});
 });
-
 
 
 
