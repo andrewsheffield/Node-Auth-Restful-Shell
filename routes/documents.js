@@ -29,7 +29,7 @@ router.post('/', ensureAuth, function(req, res) {
 
 });
 
-//#####Gets All documents for user#####
+//#####Gets All documents header information for user#####
 router.get('/', ensureAuth, function(req, res) {
 
 	var model = mongoose.model('documents');
@@ -37,12 +37,15 @@ router.get('/', ensureAuth, function(req, res) {
 
 	model.find(query, function(err, documents) {
 		if (err) res.status(500).send(err);
-		else {
-			model.populate(documents, { path: 'points' }, function (err, documents) {
-				if (err) res.status(500).send(err);
-				else res.send(documents);
-			});
-		}
+		else res.send(documents);
+			//{
+		// 	var path = { path: 'points' };
+
+		// 	model.populate(documents, path, function (err, documents) {
+		// 		if (err) res.status(500).send(err);
+		// 		else res.send(documents);
+		// 	});
+		// }
 	});
 
 });
@@ -56,7 +59,13 @@ router.get('/:id', ensureAuth, function(req, res) {
 
 	model.findOne(query, function(err, document) {
 		if (err) res.status(500).send(err);
-		else res.send(document);
+		else {
+			var path = { path: 'mainPoint' };
+			model.populate(document, path, function(err, document) {
+				if (err) res.status(500).send(err);
+				else res.send(document);
+			});
+		}
 	});
 
 });
@@ -68,6 +77,7 @@ router.put('/:id', ensureAuth, function(req, res) {
 	var id = req.params.id;
 	var query = { user: req.user, _id: id };
 	var update = req.body;
+	console.log(update);
 	
 	model.findOneAndUpdate(query, update, function(err, document) {
 		if (err) res.status(500).send(err);

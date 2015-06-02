@@ -1,27 +1,40 @@
-function makeNewPoints() {
+function makeNewPoint(document) {
 
-	for (i = 0; i < 10; i++) {
 		$.ajax({
 			type: "POST",
 		 	url: "/points",
-			data: { title: "Point: #" + i, note: "This and that and the other"},
+			data: { title: "Point", note: "This and that and the other"},
 			dataType: "json",
 			success: function(point) {
-				console.log("point added");
+				var update = { "mainPoint": point._id };
+				saveDocument(document._id, update);
 			}
 		});
 
-	}
 }
 
-function deleteAPoint(id) {
+function addPointToDocument(id) {
 
 	$.ajax({
-			type: "DELETE",
-		 	url: "/points/" + id,
-			success: function(point) {
-				console.log("point deleted");
+			type: "GET",
+		 	url: "/documents/" + id,
+			dataType: "json",
+			success: function(document) {
+				makeNewPoint(document);
 			}
 		});
 
+}
+
+function saveDocument(id, update) {
+
+	$.ajax({
+			type: "PUT",
+		 	url: "/documents/" + id,
+		 	data: update,
+			dataType: "json",
+			success: function(document) {
+				console.log(document);
+			}
+		});
 }
