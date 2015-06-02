@@ -42,7 +42,7 @@ app.factory('myFactory', function($http) {
     $http.delete(url);
   }
   factory.sendFeedback = function(feedback) {
-    var url = '/addFeedback';
+    var url = '/feedback';
     $http.post(url, feedback).success(function (res) {
       console.log(res);
     });

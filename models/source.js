@@ -6,7 +6,7 @@ var sourcesSchema = new Schema({
 		type: Schema.ObjectId,
 		ref: 'users'
 	},
-	type: String,
+	type: String, //book, website, magazine
 	articleTitle: String,
 	author: {
 		first: String,

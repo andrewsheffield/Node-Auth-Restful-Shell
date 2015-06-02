@@ -38,14 +38,6 @@ router.get('/', ensureAuth, function(req, res) {
 	model.find(query, function(err, documents) {
 		if (err) res.status(500).send(err);
 		else res.send(documents);
-			//{
-		// 	var path = { path: 'points' };
-
-		// 	model.populate(documents, path, function (err, documents) {
-		// 		if (err) res.status(500).send(err);
-		// 		else res.send(documents);
-		// 	});
-		// }
 	});
 
 });
