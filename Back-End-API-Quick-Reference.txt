@@ -1,13 +1,15 @@
 Authenticate A User
 
+	POST
 	/authenticate
 
 Logout of User
-
+	GET
 	/authenticate/logout
 
 Signup/Create a user
 
+	
 	/signup
 
 Verify an account
