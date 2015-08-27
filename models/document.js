@@ -12,7 +12,7 @@ var documentsSchema = new Schema({
 	creationDate: { type: Date, default: Date.now() },
 	modifiedDates: [Date],
 	openedDates: [Date],
-	documentBody: String
+	body: String
 });
 
 mongoose.model('documents', documentsSchema);

@@ -121,7 +121,7 @@ function unselectDocuments() {
       $(this).removeClass('panel-info selected');
       $(this).addClass('panel-primary');
       $(this).find('.doc-details').show();
-      $(this).find('button').hide();
+      $(this).find('.btn').hide();
       $(this).find('.delete-doc').hide();
     });
 }
@@ -131,7 +131,7 @@ function selectDocument(document) {
       document.removeClass('panel-primary');
       document.addClass('panel-info selected');
       document.find('.doc-details').hide();
-      document.find('button').show();
+      document.find('.btn').show();
       document.find('.delete-doc').show();
     }
 }

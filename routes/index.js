@@ -38,5 +38,9 @@ router.get('/dashboard', function(req, res, next) {
 	}
 });
 
+router.get('/document/:id', ensureAuth, function(req, res, next) {
+	res.render('document');
+});
+
 
 module.exports = router;

@@ -5,13 +5,13 @@
 
   <meta charset="UTF-8">
 
-  <title>Ink Slinger - Dashboard</title>
+  <title>Node Framework - Dashboard</title>
 
   <meta name="robots" content="noindex">
 
   <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
 
-    <link rel="stylesheet" href="stylesheets/dashboard.css">
+    <link rel="stylesheet" href="/stylesheets/dashboard.css">
 
 </head>
 
@@ -24,7 +24,7 @@
         <div class="container">
           <ol class="breadcrumb navbar-brand navbar-title">
             <li>
-              <a href="#"><span class="glyphicon glyphicon-home"></span> Ink Slinger</a>
+              <a href="/dashboard/"><span class="glyphicon glyphicon-home"></span> Node Framework</a>
             </li>
           </ol>
           <ul class="nav navbar-nav">
@@ -75,7 +75,7 @@
                 </div>
                 <div class="panel-body">
                   <div class="doc-details">{[{ doc.details }]}</div>
-                  <button class='btn btn-primary openbtn btn-block btn-lg' data-ng-click="openDoc(doc)">Open</button>
+                  <a class='btn btn-primary openbtn btn-block btn-lg' ng-href="/document/{[{ doc._id }]}">Open</a>
                   <button data-toggle='modal' data-target='#details-modal' class='btn btn-primary openbtn btn-block btn-lg' data-ng-click="detailsModal(doc)">Details</button>
                 </div>
               </div>
@@ -85,7 +85,7 @@
       </div>
     </div>
 
-    <div class="well well-lg">&copy; Ink Slinger and Andrew J Sheffield</div>
+    <div class="well well-lg">&copy; Node Framework by Andrew J Sheffield</div>
 
   </div>
 
@@ -217,7 +217,7 @@
   <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script>
   <script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js'></script>
 
-  <script src="javascripts/dashboard.js"></script>
+  <script src="/javascripts/dashboard.js"></script>
 
 </body>
 
