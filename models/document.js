@@ -11,7 +11,8 @@ var documentsSchema = new Schema({
 	status: { type: String, default: "New" },
 	creationDate: { type: Date, default: Date.now() },
 	modifiedDates: [Date],
-	openedDates: [Date]
+	openedDates: [Date],
+	documentBody: String
 });
 
 mongoose.model('documents', documentsSchema);

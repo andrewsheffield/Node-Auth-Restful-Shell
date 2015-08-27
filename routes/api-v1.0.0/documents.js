@@ -51,13 +51,7 @@ router.get('/:id', ensureAuth, function(req, res) {
 
 	model.findOne(query, function(err, document) {
 		if (err) res.status(500).send(err);
-		else {
-			var path = { path: 'mainPoint' };
-			model.populate(document, path, function(err, document) {
-				if (err) res.status(500).send(err);
-				else res.send(document);
-			});
-		}
+		else res.send(document);
 	});
 
 });
@@ -69,10 +63,13 @@ router.put('/:id', ensureAuth, function(req, res) {
 	var id = req.params.id;
 	var query = { user: req.user, _id: id };
 	var update = req.body;
-	console.log(update);
 	
 	model.findOneAndUpdate(query, update, function(err, document) {
-		if (err) res.status(500).send(err);
+		console.log(document);
+		if (err) {
+			res.status(500).send(err);
+			console.log(err);
+		}
 		else res.send(document);
 	});
 });

@@ -44,7 +44,7 @@
                 <li><a href="#" data-toggle="modal" data-target="#feedback-modal">Feedback</a></li>
                 <li class="divider"></li>
                 <!--li><a href="#" data-toggle="modal" data-target="#settings-modal">Settings</a></li-->
-                <li><a href="/authenticate/logout">Logout</a></li>
+                <li><a href="/api-v1.0.0/authenticate/logout">Logout</a></li>
               </ul>
             </li>
           </ul>

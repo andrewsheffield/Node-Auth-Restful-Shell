@@ -40,7 +40,7 @@
       <!--Login Tab-->
       <div class="tab-pane fade in active" id="login">
         
-        <form class="form-login" name="login">
+        <form class="form-login" name="login" action="/api-v1.0.0/authenticate/" method="post">
           <div class="input-group">
             <div class="input-group-addon">
               <span class="glyphicon glyphicon-envelope"></span>
@@ -59,7 +59,7 @@
               Remember Me
             </label>
           </div>
-          <button class="btn btn-primary btn-lg btn-block" ng-click="attemptLogin()">
+          <button class="btn btn-primary btn-lg btn-block">
             <span class="glyphicon glyphicon-home"></span> 
             Login
           </button>

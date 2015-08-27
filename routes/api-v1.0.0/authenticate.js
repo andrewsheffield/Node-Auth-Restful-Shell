@@ -7,12 +7,14 @@ var crypto = require('crypto');
 var bcrypt = require('bcrypt');
 
 /*   /api-v1.0.0/authenticate/   */
-router.post('/', passport.authenticate('local', 
+router.post('/',
+	passport.authenticate('local', 
 	{
-		//successRedirect: '/',
 		failureRedirect: '/',
 		failureFlash: true
 	}),
+	//Checks for remember me token...if no token exists it will invoke the next function
+	//If rmtoken exists it will authenticate the ser and then invoke the next function
 	function (req, res, next) {
 		if (!req.body.rememberme) { return next(); }
 
@@ -25,8 +27,10 @@ router.post('/', passport.authenticate('local',
         	});
     	});
 	},
+	//Function is invoked on successful authentication
 	function (req, res) {
-		res.redirect('/');
+		console.log(req.user._id + " has logged in.");
+		res.redirect('/dashboard');
 	}
 );
 
@@ -34,11 +38,7 @@ router.post('/', passport.authenticate('local',
 router.get('/logout', function(req, res, next) {
 	req.logout();
 	res.clearCookie('remember_me');
-	res.render('infosplash', {
-		title: 'Ink-Slinger - Logout',
-		header: 'You have successfully logged out.',
-		body: 'We hope to see you again soon!'
-	});
+	res.redirect('/');
 });
 
 module.exports = router;

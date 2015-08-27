@@ -68,7 +68,7 @@ router.post('/', function(req, res) {
 					if (err) return console.error(err);
 
 					console.log('User ' + user._id + ' has just signed up.');
-					var url = req.protocol + '://' + req.get('host') + "/verify/" + user._id;
+					var url = req.protocol + '://' + req.get('host') + "/api-v1.0.0/signup/verify/" + user._id;
 
 					// setup e-mail data with unicode symbols
 					var mailOptions = {
