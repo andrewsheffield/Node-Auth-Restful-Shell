@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var crypto = require('crypto');
 var bcrypt = require('bcrypt');
 
-//   '/authenticate/'
+/*   /api-v1.0.0/authenticate/   */
 router.post('/', passport.authenticate('local', 
 	{
 		//successRedirect: '/',
@@ -15,15 +15,12 @@ router.post('/', passport.authenticate('local',
 	}),
 	function (req, res, next) {
 		if (!req.body.rememberme) { return next(); }
-		console.log("started Auth");
 
     	mongoose.model('auth').findOne( { 'user' : req.user }, function (err, auth) {
-    		console.log("found auth");
     		auth.rmToken = crypto.randomBytes(16).toString('hex');
         	bcrypt.hash(auth.rmToken, 10, function(err, hash) {
           		res.cookie('remember_me', req.user.username + " " + hash, { maxAge: (30 * 24 * 60 * 60 * 1000), httpOnly: true });
           		auth.save();
-          		console.log("Auth saved");
           		return next();
         	});
     	});
@@ -33,6 +30,7 @@ router.post('/', passport.authenticate('local',
 	}
 );
 
+/*  /api-v1.0.0/logout/  */
 router.get('/logout', function(req, res, next) {
 	req.logout();
 	res.clearCookie('remember_me');

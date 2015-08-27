@@ -155,15 +155,21 @@ passport.deserializeUser(function(id, done) {
 fs.readdirSync(__dirname + '/routes').forEach(function(filename) {
   if (~filename.indexOf('.js')) {
     var aRoute = require(__dirname + '/routes/' + filename);
-    var filenameFront = filename.split('.')[0];
+    var filenameFront = filename.substring(0, filename.indexOf('.js'));
     app.use('/' + filenameFront, aRoute);
   }
 });
 
+//Get all routers in API v1.0.0
+fs.readdirSync(__dirname + '/routes/api-v1.0.0').forEach(function(filename) {
+  if (~filename.indexOf('.js')) {
+    var aRoute = require(__dirname + '/routes/api-v1.0.0/' + filename);
+    var filenameFront = filename.substring(0, filename.indexOf('.js'));
+    app.use('/api-v1.0.0/' + filenameFront, aRoute);
+  }
+});
+
 app.use('/', routes);
-
-
-
 
 
 // catch 404 and forward to error handler
