@@ -1,5 +1,5 @@
 {
-  "name": "exp2015",
+  "name": "Authentication-Restful-Shell",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -16,7 +16,7 @@
     "express-session": "^1.10.4",
     "hjs": "~0.0.6",
     "less-middleware": "1.0.x",
-    "mongoose": "^3.8.25",
+    "mongoose": "^3.x.x",
     "morgan": "~1.5.1",
     "nodemailer": "^1.3.2",
     "passport": "^0.2.1",

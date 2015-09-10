@@ -10,8 +10,8 @@ Node.js app using
 Make sure you have [Node.js](http://nodejs.org/), the [Heroku Toolbelt](https://toolbelt.heroku.com/) and [Nodemon](http://nodemon.io) installed.
 
 ```sh
-$ git clone https://github.com/andrewsheffield/ink-slinger.git
-$ cd ink-slinger
+$ git clone https://github.com/andrewsheffield/Node-Auth-Restful-Shell.git
+$ cd Node-Auth-Restful-Shell
 $ npm install
 $ nodemon bin/www
 ```

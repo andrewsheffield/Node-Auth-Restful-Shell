@@ -1,7 +1,5 @@
 html, body {
   //background-color: grey;
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 .user-dropdown {
@@ -17,39 +15,36 @@ html, body {
   margin-bottom: 20px;
 }
 
-.content {
-  min-height: 528px;
-}
-
-.doc {
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-
 .panel-doc {
   height: 219px;
   width: 70%;
   margin: 0 auto;
   overflow: hidden;
   cursor:pointer;
-  
-  .btn {
-    display: none;
-  }
 }
 
 .delete-doc {
   position:absolute;
-  margin-left: -13px;
-  margin-top: 2px;
+  right:40px;
+  top:-10px;
   font-size:25px;
-  display: none;
 }
 
 .delete-doc:hover {
-  color: #900;
+  color:red;
 }
 
-.openbtn {
-  margin-top: 25px;
+.body-well {
+  height: 650px;
+  textarea {
+    height: 100%;
+    resize: none;
+    overflow: scroll;
+  }
+}
+
+.alert {
+  margin: 0px;
+  padding: 5px;
+  margin-top: 8px;
 }

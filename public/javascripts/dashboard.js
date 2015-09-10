@@ -8,7 +8,7 @@ app.factory('myFactory', function($http) {
   
   var factory = {};
   factory.getDocuments = function () {
-    var url = '/documents';
+    var url = '/api-v1.0.0/documents/';
     $http.get(url).success(function (res) {
       res.forEach(function(obj, i) {
         documents.push(obj);
@@ -17,13 +17,13 @@ app.factory('myFactory', function($http) {
     return documents;
   }
   factory.pushDocument = function(document) {
-    var url = '/documents';
+    var url = '/api-v1.0.0/documents';
     $http.post(url, document).success(function (res) {
       documents.push(res);
     });
   }
   factory.updateDocument = function(document) {
-    var url = '/documents/' + document._id;
+    var url = '/api-v1.0.0/documents/' + document._id;
     $http.put(url, document).success(function (res) {
       documents.forEach(function(obj, i) {
         if (obj._id == res._id) {
@@ -38,11 +38,11 @@ app.factory('myFactory', function($http) {
       if (documents[i]._id == document._id) documents.splice(i, 1);
     }
 
-    var url = '/documents/' + document._id;
+    var url = '/api-v1.0.0/documents/' + document._id;
     $http.delete(url);
   }
   factory.sendFeedback = function(feedback) {
-    var url = '/feedback';
+    var url = '/api-v1.0.0/feedback/';
     $http.post(url, feedback).success(function (res) {
       console.log(res);
     });
@@ -121,7 +121,7 @@ function unselectDocuments() {
       $(this).removeClass('panel-info selected');
       $(this).addClass('panel-primary');
       $(this).find('.doc-details').show();
-      $(this).find('button').hide();
+      $(this).find('.btn').hide();
       $(this).find('.delete-doc').hide();
     });
 }
@@ -131,7 +131,7 @@ function selectDocument(document) {
       document.removeClass('panel-primary');
       document.addClass('panel-info selected');
       document.find('.doc-details').hide();
-      document.find('button').show();
+      document.find('.btn').show();
       document.find('.delete-doc').show();
     }
 }

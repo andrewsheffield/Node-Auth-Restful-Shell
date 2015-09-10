@@ -12,10 +12,7 @@ var documentsSchema = new Schema({
 	creationDate: { type: Date, default: Date.now() },
 	modifiedDates: [Date],
 	openedDates: [Date],
-	mainPoint: {
-		type: Schema.ObjectId,
-		ref: 'points'
-	}
+	body: String
 });
 
 mongoose.model('documents', documentsSchema);

@@ -6,17 +6,19 @@ var bodyParser = require('body-parser');
 var crypto = require('crypto');
 var bcrypt = require('bcrypt');
 
-//   '/authenticate/'
-router.post('/', passport.authenticate('local', 
+/*   /api-v1.0.0/authenticate/   */
+router.post('/',
+	passport.authenticate('local', 
 	{
-		//successRedirect: '/',
 		failureRedirect: '/',
 		failureFlash: true
 	}),
+	//Checks for remember me token...if no token exists it will invoke the next function
+	//If rmtoken exists it will authenticate the ser and then invoke the next function
 	function (req, res, next) {
 		if (!req.body.rememberme) { return next(); }
 
-    	mongoose.model('auth').findOne( { 'user' : req.user._id }, function (err, auth) {
+    	mongoose.model('auth').findOne( { 'user' : req.user }, function (err, auth) {
     		auth.rmToken = crypto.randomBytes(16).toString('hex');
         	bcrypt.hash(auth.rmToken, 10, function(err, hash) {
           		res.cookie('remember_me', req.user.username + " " + hash, { maxAge: (30 * 24 * 60 * 60 * 1000), httpOnly: true });
@@ -25,19 +27,18 @@ router.post('/', passport.authenticate('local',
         	});
     	});
 	},
+	//Function is invoked on successful authentication
 	function (req, res) {
-		res.redirect('/');
+		console.log(req.user._id + " has logged in.");
+		res.redirect('/dashboard');
 	}
 );
 
+/*  /api-v1.0.0/logout/  */
 router.get('/logout', function(req, res, next) {
 	req.logout();
 	res.clearCookie('remember_me');
-	res.render('infosplash', {
-		title: 'Ink-Slinger - Logout',
-		header: 'You have successfully logged out.',
-		body: 'We hope to see you again soon!'
-	});
+	res.redirect('/');
 });
 
 module.exports = router;

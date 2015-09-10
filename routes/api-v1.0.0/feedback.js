@@ -11,7 +11,7 @@ router.post('/', function(req, res) {
 
 	feedback.save(function (err, feedback) {
 		if (err) res.status(500).send(err);
-		else res.send(200);
+		else res.sendStatus(200);
 	});
 
 });
